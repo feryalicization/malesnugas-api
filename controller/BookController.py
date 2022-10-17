@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
 from controller.support import token_required_jwt
-from service.jurnalService import list_jurnal, Detail, Create, Edit, Delete
+from service.bookService import list_book, Detail, Create, Edit, Delete
 
 
 api = Namespace('Jurnal API')
@@ -34,7 +34,7 @@ class ListLogActivityExpertController(Resource):
             return response
 
         user_id = check_token['id']
-        jurnal_list = list_jurnal()
+        jurnal_list = list_book()
 
         if len(jurnal_list) > 0:
             return jsonify(

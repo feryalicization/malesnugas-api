@@ -1,6 +1,8 @@
-# from entity.model import User
+from entity.model import User
 from entity import db
 import jwt
+
+
 
 secrets = 'secretindependent'
 
@@ -12,3 +14,5 @@ def token_required_jwt(token):
     except:
         payload = None
     return payload
+
+

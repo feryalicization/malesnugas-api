@@ -8,13 +8,14 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     is_metode = db.Column(db.Boolean())
     is_variabel = db.Column(db.Boolean())
-    user_id = db.Column(db.Integer)
+    created_by = db.Column(db.Integer)
     created_date = db.Column(db.DateTime)
-    update_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
     deleted_date = db.Column(db.DateTime)
     text = db.Column(db.Text)
     penerbit_id = db.Column(db.Integer)
     literature_id = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)
 
 
 
@@ -27,11 +28,12 @@ class Jurnal(db.Model):
     is_penelitian_terdahulu = db.Column(db.Boolean())
     text = db.Column(db.Text)
     penerbit_id = db.Column(db.Integer)
-    user_id = db.Column(db.Integer)
+    created_by = db.Column(db.Integer)
     created_date = db.Column(db.DateTime)
-    update_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
     deleted_date = db.Column(db.DateTime)
     literature_id = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)
 
 
 class Literature(db.Model):
@@ -57,11 +59,43 @@ class Penerbit(db.Model):
     city = db.Column(db.String(225))
     jurnal_name = db.Column(db.String(225))
     penerbit_name = db.Column(db.String(225))
-    year = db.Column(db.DateTime)
+    year = db.Column(db.Integer)
     link = db.Column(db.String(225))
     issn = db.Column(db.String(225))
-    user_id = db.Column(db.Integer)
+    created_by = db.Column(db.Integer)
+    created_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
+    deleted_date = db.Column(db.DateTime)
+
+
+
+class User(db.Model):
+    __tablename__ = "user"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(225))
+    password = db.Column(db.String(225))
+    full_name = db.Column(db.String(225))
+    email = db.Column(db.String(225))
+    notelp = db.Column(db.String(225))
+    gender = db.Column(db.Integer)
+    universitas = db.Column(db.String(225))
+    fakultas = db.Column(db.String(225))
+    jurusan = db.Column(db.String(225))
     created_date = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime)
     deleted_date = db.Column(db.DateTime)
 
+
+
+class Ahli(db.Model):
+    __tablename__ = "ahli"
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(225))
+    email = db.Column(db.String(225))
+    created_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
+    deleted_date = db.Column(db.DateTime)
+    created_by = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)
+
+    

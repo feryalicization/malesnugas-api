@@ -36,28 +36,28 @@ def List():
             'username': x.username,
             'fullName': x.full_name,
             'email': x.email,
-            'notlp': x.notlp,
-            'gender': x.gender,
+            'notelp': x.notelp,
+            'gender': "Laki-laki" if x.gender == 1 else "Perempuan",
         })
 
     return data
 
 
 
-def create_user(param, current_user):
+def create_user(param, user_id):
     password = param['password'].encode("utf-8")
     pw_hash = bcrypt.hashpw(password, bcrypt.gensalt())
 
     # Username
-    if param['userName'] is None:
+    if param['user_name'] is None:
         return jsonify({'msg': 'Username cannot be empty', 'code': '-1'})
-    if len(param['userName']) > 40:
+    if len(param['user_name']) > 40:
         return jsonify({'error': "Max char username is 40"})
 
     # Fullname
-    if param['fullName'] is None:
+    if param['full_name'] is None:
         return jsonify({'msg': 'Full name cannot be empty', 'code': '-1'})
-    if len(param['fullName']) > 100:
+    if len(param['full_name']) > 100:
         return jsonify({'error': "Max char full name is 100"})
 
 
@@ -69,7 +69,7 @@ def create_user(param, current_user):
 
 
 
-    username_validation = User.query.filter_by(username=param['userName']).first()
+    username_validation = User.query.filter_by(username=param['user_name']).first()
     if username_validation:
        return jsonify({'msg': 'Username already exist!', 'code': '-1'})
 
@@ -79,12 +79,20 @@ def create_user(param, current_user):
 
     try:
         create = User(
-            username=param['userName'].lower(),
+            username=param['user_name'].lower(),
             password=pw_hash.decode("utf-8"),
-            full_name=param['fullName'],
-            gender=param['gender'],
-            notlp=param['notlp'],
-            email=param['email'])
+            full_name=param['full_name'],
+            # gender=param['gender'],
+            notelp=param['notelp'],
+            email=param['email'],
+            universitas=param['universitas'],
+            fakultas=param['fakultas'],
+            jurusan=param['jurusan'],
+
+            # Generate
+            created_date=datetime.datetime.now(),
+            # created_by=user_id,
+            )
         
     
         db.session.add(create)
@@ -114,7 +122,7 @@ from bcrypt import hashpw
 
 def login(param):
     try:
-        username = param['userName']
+        username = param['user_name']
         password = param['password']
 
         query = User.query.filter_by(username=username).first()

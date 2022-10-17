@@ -1,10 +1,10 @@
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
 from controller.support import token_required_jwt
-from service.jurnalService import list_jurnal, Detail, Create, Edit, Delete
+from service.penerbitService import list_penerbit, Detail, Create, Edit, Delete
 
 
-api = Namespace('Jurnal API')
+api = Namespace('Penerbit API')
 
 auth_header = {'x-corpu': {'name': 'x-corpu',
                            'in': 'header',
@@ -15,7 +15,7 @@ auth_header = {'x-corpu': {'name': 'x-corpu',
 
 @api.route('/list')
 @api.doc(params=auth_header)
-class ListLogActivityExpertController(Resource):
+class ListController(Resource):
     @staticmethod
     def get():
         token = None
@@ -34,7 +34,7 @@ class ListLogActivityExpertController(Resource):
             return response
 
         user_id = check_token['id']
-        jurnal_list = list_jurnal()
+        jurnal_list = list_penerbit()
 
         if len(jurnal_list) > 0:
             return jsonify(
@@ -47,7 +47,7 @@ class ListLogActivityExpertController(Resource):
 
 @api.route('/detail/<int:id>')
 @api.doc(params=auth_header)
-class DetailCategoryAccomodationController(Resource):
+class DetailController(Resource):
     @staticmethod
     def get(id):
         token = None
@@ -79,7 +79,7 @@ class DetailCategoryAccomodationController(Resource):
 
 @api.route('/create')
 @api.doc(params=auth_header)
-class CreateCategoryAccomodationController(Resource):
+class CreateController(Resource):
     def post(data):
         token = None
         if 'x-corpu' in request.headers:
@@ -114,7 +114,7 @@ class CreateCategoryAccomodationController(Resource):
 
 @api.route('/edit/<int:id>')
 @api.doc(params=auth_header)
-class EditCategoryAccomodationController(Resource):
+class EditController(Resource):
     @staticmethod
     def put(id):
         token = None
@@ -153,7 +153,7 @@ class EditCategoryAccomodationController(Resource):
 
 @api.route('/delete/<int:id>')
 @api.doc(params=auth_header)
-class DeleteCategoryAccomodationController(Resource):
+class DeleteController(Resource):
     @staticmethod
     def delete(id):
         token = None
