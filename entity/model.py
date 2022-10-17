@@ -63,6 +63,7 @@ class Penerbit(db.Model):
     link = db.Column(db.String(225))
     issn = db.Column(db.String(225))
     created_by = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)
     created_date = db.Column(db.DateTime)
     updated_date = db.Column(db.DateTime)
     deleted_date = db.Column(db.DateTime)

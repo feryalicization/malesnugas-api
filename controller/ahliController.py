@@ -4,7 +4,7 @@ from controller.support import token_required_jwt
 from service.ahliService import list_ahli, Detail, Create, Edit, Delete
 
 
-api = Namespace('Jurnal API')
+api = Namespace('Ahli API')
 
 auth_header = {'x-corpu': {'name': 'x-corpu',
                            'in': 'header',

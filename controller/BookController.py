@@ -4,7 +4,7 @@ from controller.support import token_required_jwt
 from service.bookService import list_book, Detail, Create, Edit, Delete
 
 
-api = Namespace('Jurnal API')
+api = Namespace('Book API')
 
 auth_header = {'x-corpu': {'name': 'x-corpu',
                            'in': 'header',

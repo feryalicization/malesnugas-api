@@ -4,7 +4,7 @@ import json
 from sqlalchemy import null, or_, and_, desc, table
 import datetime
 
-from entity.model import Jurnal
+from entity.model import Jurnal, User, Penerbit
 
 
 
@@ -13,6 +13,7 @@ def list_jurnal():
     query = db.session.query(Jurnal).filter(Jurnal.deleted_date == None)
     
     for x in query:
+        user = db.session.query(User).filter(User.id == x.created_by).first()
         data.append({
             "id": x.id,
             "is_metode": x.is_metode,
@@ -20,11 +21,9 @@ def list_jurnal():
             "is_teori_penghubung": x.is_teori_penghubung,
             "is_penelitian_terdahulu": x.is_penelitian_terdahulu,
             "text": x.text,
-            "penerbit_id": x.penerbit_id,
-            "created_by": x.created_by,
-            "literature_id": x.literature_id,
+            "created_by": user.full_name,
             "created_date": None if x.created_date == None else x.created_date.strftime("%Y-%m-%d"),
-            "update_date": None if x.update_date == None else x.update_date.strftime("%Y-%m-%d"),
+            "update_date": None if x.updated_date == None else x.updated_date.strftime("%Y-%m-%d"),
         })
 
     return data
@@ -37,6 +36,11 @@ def Detail(id):
     req = db.session.query(Jurnal).filter(Jurnal.deleted_date == None).filter(Jurnal.id==id).first()
         
     if req:
+        user = db.session.query(User).filter(User.id == req.created_by).first()
+        update = db.session.query(User.full_name.label('updated_by')).join(
+                Jurnal, Jurnal.updated_by == User.id).filter(User.id == req.updated_by).first()
+        penerbit = db.session.query(Penerbit.name.label('penerbit_name')).join(
+                Jurnal, Jurnal.penerbit_id == Penerbit.id).filter(Penerbit.id == req.penerbit_id).first()
         data = {
             "id": req.id,
             "is_metode": req.is_metode,
@@ -44,11 +48,11 @@ def Detail(id):
             "is_teori_penghubung": req.is_teori_penghubung,
             "is_penelitian_terdahulu": req.is_penelitian_terdahulu,
             "text": req.text,
-            "penerbit_id": req.penerbit_id,
-            "created_by": req.created_by,
-            "literature_id": req.literature_id,
+            "penerbit": None if req.penerbit_id == None else penerbit.penerbit_name,
+            "created_by": user.full_name,
+            "updated_by": None if req.updated_by == None else update.updated_by,
             "created_date": None if req.created_date == None else req.created_date.strftime("%Y-%m-%d"),
-            "update_date": None if req.update_date == None else req.update_date.strftime("%Y-%m-%d"),
+            "updated_date": None if req.updated_date == None else req.updated_date.strftime("%Y-%m-%d"),
             }
 
     return data

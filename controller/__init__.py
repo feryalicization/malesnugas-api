@@ -11,7 +11,7 @@ app = Flask(__name__)
 blueprint = Blueprint('api', __name__)
 api = Api(blueprint, title='MALESNUGAS API Documentation',
           version='1.0',
-          description='MALESNUGAS API for LMS')
+          description='MALESNUGAS API')
 
 
 api.add_namespace(jurnal,'/jurnal')

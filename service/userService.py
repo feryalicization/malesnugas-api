@@ -82,7 +82,7 @@ def create_user(param, user_id):
             username=param['user_name'].lower(),
             password=pw_hash.decode("utf-8"),
             full_name=param['full_name'],
-            # gender=param['gender'],
+            gender=param['gender'],
             notelp=param['notelp'],
             email=param['email'],
             universitas=param['universitas'],
