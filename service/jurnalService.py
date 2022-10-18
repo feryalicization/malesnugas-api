@@ -14,6 +14,8 @@ def list_jurnal():
     
     for x in query:
         user = db.session.query(User).filter(User.id == x.created_by).first()
+        penerbit = db.session.query(Penerbit.name.label('penerbit_name')).join(
+                Jurnal, Jurnal.penerbit_id == Penerbit.id).filter(Penerbit.id == x.penerbit_id).first()
         data.append({
             "id": x.id,
             "is_metode": x.is_metode,
@@ -21,6 +23,7 @@ def list_jurnal():
             "is_teori_penghubung": x.is_teori_penghubung,
             "is_penelitian_terdahulu": x.is_penelitian_terdahulu,
             "text": x.text,
+            "penerbit": None if x.penerbit_id == None else penerbit.penerbit_name,
             "created_by": user.full_name,
             "created_date": None if x.created_date == None else x.created_date.strftime("%Y-%m-%d"),
             "update_date": None if x.updated_date == None else x.updated_date.strftime("%Y-%m-%d"),

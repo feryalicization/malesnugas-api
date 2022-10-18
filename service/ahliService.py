@@ -4,7 +4,7 @@ import json
 from sqlalchemy import null, or_, and_, desc, table
 import datetime
 
-from entity.model import Ahli
+from entity.model import Ahli, User
 
 
 
@@ -13,11 +13,13 @@ def list_ahli():
     query = db.session.query(Ahli).filter(Ahli.deleted_date == None)
     
     for x in query:
+        user = db.session.query(User).filter(User.id == x.created_by).first()
+
         data.append({
             "id": x.id,
             "full_name": x.full_name,
             "email": x.email,
-            "created_by": x.created_by,
+            "created_by": user.full_name,
             "created_date": None if x.created_date == None else x.created_date.strftime("%Y-%m-%d"),
             "updated_date": None if x.updated_date == None else x.updated_date.strftime("%Y-%m-%d"),
         })
@@ -32,11 +34,18 @@ def Detail(id):
     req = db.session.query(Ahli).filter(Ahli.deleted_date == None).filter(Ahli.id==id).first()
         
     if req:
+
+        created = db.session.query(User).filter(User.id == req.created_by).first()
+
+        update = db.session.query(User.full_name.label('updated_by')).join(
+                Ahli, Ahli.updated_by == User.id).filter(User.id == req.updated_by).first()
+                
         data = {
            "id": req.id,
             "full_name": req.full_name,
             "email": req.email,
-            "created_by": req.created_by,
+            "created_by": None if created.full_name == None else created.full_name,
+            "updated_by": None if req.updated_by == None else update.updated_by,
             "created_date": None if req.created_date == None else req.created_date.strftime("%Y-%m-%d"),
             "updated_date": None if req.updated_date == None else req.updated_date.strftime("%Y-%m-%d"),
             }

@@ -6,6 +6,7 @@ from controller.userController import api as user
 from controller.BookController import api as book
 from controller.ahliController import api as ahli
 from controller.penerbitController import api as penerbit
+from controller.literatureController import api as literature
 
 app = Flask(__name__)
 blueprint = Blueprint('api', __name__)
@@ -19,6 +20,7 @@ api.add_namespace(user,'/user')
 api.add_namespace(book,'/book')
 api.add_namespace(ahli,'/ahli')
 api.add_namespace(penerbit,'/penerbit')
+api.add_namespace(literature,'/literature')
 
 
 app.register_blueprint(blueprint)
