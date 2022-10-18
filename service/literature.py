@@ -18,7 +18,12 @@ def list_literature():
     Book.text.label('book_text'),
     Jurnal.name.label('jurnal'),
     Jurnal.text.label('jurnal_text'),
-    Penerbit.year
+    Penerbit.year,
+    Book.is_metode.label("book_is_metode"), Book.is_variabel.label("book_is_variabel"),
+    Jurnal.is_metode.label('jurnal_is_metode'),
+    Jurnal.is_variabel.label("jurnal_is_variabel"), Jurnal.is_teori_penghubung.label('jurnal_is_teori_penghubung'),
+    Jurnal.is_penelitian_terdahulu.label('jurnal_is_penelitian_terdahulu'),
+
     )\
     .join(Book, and_(Literature.table_id == Book.id, Literature.table_name == 'book'), isouter=True)\
     .join(Jurnal, and_(Literature.table_id == Jurnal.id, Literature.table_name == 'jurnal'), isouter=True)\
@@ -28,6 +33,24 @@ def list_literature():
     
     
     for x in query:
+        if x.jurnal_is_metode == True:
+            jenis = "metode"
+        elif x.jurnal_is_variabel == True:
+            jenis = "variabel"
+        elif x.jurnal_is_teori_penghubung == True:
+            jenis = "teori penghubung"
+        elif x.jurnal_is_penelitian_terdahulu == True:
+            jenis = "penelitian terdahulu"
+        else:
+            None
+
+
+        if x.book_is_metode == True:
+            jenis = "metode"
+        elif x.book_is_variabel == True:
+            jenis = "variabel"
+        else:
+            None
 
         data.append({
             "id": x.id,
@@ -35,6 +58,7 @@ def list_literature():
             "tahun": x.year,
             "judul": x.jurnal if x.is_jurnal == True or x.is_book == False or x.is_book == None else x.book,
             "tipe": "jurnal" if x.is_jurnal == True or x.is_book == False or x.is_book == None else "book",
+            "jenis": jenis,
         })
 
     return data
@@ -84,7 +108,7 @@ def Detail(id):
 
         if req.penerbit_is_jurnal == True:
             ref = req.jurnal_name
-            dafpus = f"{req.full_name}. ({req.year}). {req.jurnal}. {req.jurnal_name}, Vol. {req.volume}, No. {req.nomor}, ISSN:{req.issn}, sumber: {req.link}"
+            dafpus = f"{req.full_name}. ({req.year}). {req.jurnal}. {req.jurnal_name}, Vol. {req.volume}, No. {req.nomor}, ISSN: {req.issn}, sumber: {req.link}"
             
             if req.jurnal_is_metode == True:
                 jenis = "metode"
@@ -99,7 +123,7 @@ def Detail(id):
             
         elif req.penerbit_is_book == True:
             ref = req.penerbit_name
-            dafpus = f"{req.full_name}. ({req.year}). {req.book}. {req.city}: {req.penerbit_name}, ISSN:{req.issn}."
+            dafpus = f"{req.full_name}. ({req.year}). {req.book}. {req.city}: {req.penerbit_name}, ISSN: {req.issn}."
 
             if req.book_is_metode == True:
                 jenis = "metode"
