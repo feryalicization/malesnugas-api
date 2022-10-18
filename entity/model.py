@@ -14,7 +14,6 @@ class Book(db.Model):
     deleted_date = db.Column(db.DateTime)
     text = db.Column(db.Text)
     name = db.Column(db.String(225))
-    literature_id = db.Column(db.Integer)
     updated_by = db.Column(db.Integer)
 
 
@@ -32,7 +31,6 @@ class Jurnal(db.Model):
     created_date = db.Column(db.DateTime)
     updated_date = db.Column(db.DateTime)
     deleted_date = db.Column(db.DateTime)
-    literature_id = db.Column(db.Integer)
     updated_by = db.Column(db.Integer)
 
 
@@ -60,7 +58,6 @@ class Penerbit(db.Model):
     is_book = db.Column(db.Boolean())
     is_jurnal = db.Column(db.Boolean())
     is_artikel = db.Column(db.Boolean())
-    name = db.Column(db.String(225))
     city = db.Column(db.String(225))
     jurnal_name = db.Column(db.String(225))
     penerbit_name = db.Column(db.String(225))

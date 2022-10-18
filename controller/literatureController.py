@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
 from controller.support import token_required_jwt
-from service.literature import list_literature, Detail, Create, Edit, Delete
+from service.literatureService import list_literature, Detail, Create, Edit, Delete
 
 
 api = Namespace('Literature API')

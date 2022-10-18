@@ -156,8 +156,10 @@ def Detail(id):
 def Create(param, user_id):
     try:
         create = Literature(
-            full_name=param['full_name'],
-            email=param['email'],
+            is_jurnal=param['is_jurnal'],
+            is_book=param['is_book'],
+            is_artikel=param['is_artikel'],
+            ahli_id=param['ahli_id'],
    
             #Generate
             created_date=datetime.datetime.now(),

@@ -1,10 +1,11 @@
+from typing import Literal
 from entity import db
 import datetime
 import json
 from sqlalchemy import null, or_, and_, desc, table
 import datetime
 
-from entity.model import Jurnal, User, Penerbit
+from entity.model import Ahli, Jurnal, Literature, User, Penerbit
 
 
 
@@ -67,9 +68,8 @@ def Create(param, user_id):
             is_variabel=param['is_variabel'],
             is_teori_penghubung=param['is_teori_penghubung'],
             is_penelitian_terdahulu=param['is_penelitian_terdahulu'],
+            name=param['name'],
             text=param['text'],
-            penerbit_id=param['penerbit_id'],
-            literature_id=param['literature_id'],
    
             #Generate
             created_date=datetime.datetime.now(),
@@ -78,7 +78,45 @@ def Create(param, user_id):
 
         db.session.add(create)
         db.session.commit()
-        return True
+        # return True
+
+        if create:
+            create_penerbit = Penerbit(
+                is_jurnal=True,
+                jurnal_name=param['jurnal_name'],
+                link=param['link'],
+                issn=param['issn'],
+                year=param['year'],
+                nomor=param['nomor'],
+                volume=param['volume'],
+
+                #Generate
+                created_date=datetime.datetime.now(),
+                created_by=user_id,
+            )
+            db.session.add(create_penerbit)
+            db.session.commit()
+
+            if create_penerbit:
+                create_literature = Literature(
+                    is_jurnal=True,
+                    ahli_id=param['ahli_id'],
+                    table_id = create.id,
+                    table_name = 'jurnal',
+                    penerbit_id = create_penerbit.id,
+
+                    #Generate
+                    created_date=datetime.datetime.now(),
+                    created_by=user_id,      
+                )
+
+                db.session.add(create_literature)
+                db.session.commit()
+
+                return True
+
+
+
     except Exception as e:
         print(e)
         db.session.rollback()
