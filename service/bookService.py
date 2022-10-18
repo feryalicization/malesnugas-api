@@ -1,10 +1,11 @@
+from unicodedata import name
 from entity import db
 import datetime
 import json
 from sqlalchemy import null, or_, and_, desc, table
 import datetime
 
-from entity.model import Book, User, Penerbit
+from entity.model import Book, User, Penerbit, Literature
 
 
 
@@ -68,8 +69,7 @@ def Create(param, user_id):
             is_metode=param['is_metode'],
             is_variabel=param['is_variabel'],
             text=param['text'],
-            penerbit_id=param['penerbit_id'],
-            literature_id=param['literature_id'],
+            name=param['name'],
    
             #Generate
             created_date=datetime.datetime.now(),
@@ -78,7 +78,40 @@ def Create(param, user_id):
 
         db.session.add(create)
         db.session.commit()
-        return True
+        
+        if create:
+            create_penerbit = Penerbit(
+                is_book=True,
+                city=param['city'],
+                penerbit_name=param['penerbit_name'],
+                issn=param['issn'],
+                year=param['year'],
+
+                #Generate
+                created_date=datetime.datetime.now(),
+                created_by=user_id,
+            )
+            db.session.add(create_penerbit)
+            db.session.commit()
+
+            if create_penerbit:
+                create_literature = Literature(
+                    is_book=True,
+                    ahli_id=param['ahli_id'],
+                    table_id = create.id,
+                    table_name = 'book',
+                    penerbit_id = create_penerbit.id,
+
+                    #Generate
+                    created_date=datetime.datetime.now(),
+                    created_by=user_id,      
+                )
+
+                db.session.add(create_literature)
+                db.session.commit()
+
+                return True
+
     except Exception as e:
         print(e)
         db.session.rollback()
