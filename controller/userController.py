@@ -49,7 +49,7 @@ class ListCountryController(Resource):
 
 
 @api.doc(params=auth_header)
-@api.route('/create-user')
+@api.route('/register')
 class createUserController(Resource):
     @staticmethod
     def post():

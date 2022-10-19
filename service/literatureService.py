@@ -5,7 +5,7 @@ from sqlalchemy import null, or_, and_, desc, table
 import datetime
 
 from entity.model import Literature, User, Ahli, Book, Jurnal, Penerbit
-from sqlalchemy.orm import aliased
+
 
 
 def list_literature():
@@ -29,7 +29,8 @@ def list_literature():
     .join(Jurnal, and_(Literature.table_id == Jurnal.id, Literature.table_name == 'jurnal'), isouter=True)\
     .join(Penerbit, Penerbit.id == Literature.penerbit_id, isouter=True)\
     .join(Ahli, Ahli.id == Literature.ahli_id)\
-    .filter(Literature.deleted_date == None)
+    .filter(Literature.deleted_date == None)\
+    .order_by(desc(Literature.id))
     
     
     for x in query:

@@ -103,4 +103,57 @@ class Ahli(db.Model):
     created_by = db.Column(db.Integer)
     updated_by = db.Column(db.Integer)
 
+
+
+
+class Notification(db.Model):
+    __tablename__ = "notification"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(225))
+    message = db.Column(db.String(225))
+    body = db.Column(db.String(225))
+    notification_cat_id = db.Column(db.Integer)
+    created_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
+    deleted_date = db.Column(db.DateTime)
+    created_by = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)
+
     
+class Notification_cat(db.Model):
+    __tablename__ = "notification_cat"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(225))
+    created_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
+    deleted_date = db.Column(db.DateTime)
+    created_by = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)
+
+
+
+class Notification_status(db.Model):
+    __tablename__ = "notification_status"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(225))
+    created_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
+    deleted_date = db.Column(db.DateTime)
+    created_by = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)   
+
+
+
+class Mapping_notification(db.Model):
+    __tablename__ = "mapping_notification"
+    id = db.Column(db.Integer, primary_key=True)
+    notification_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
+    notification_status_id = db.Column(db.Integer)
+    is_read = db.Column(db.Boolean())
+    is_reply = db.Column(db.Boolean())
+    created_date = db.Column(db.DateTime)
+    updated_date = db.Column(db.DateTime)
+    deleted_date = db.Column(db.DateTime)
+    created_by = db.Column(db.Integer)
+    updated_by = db.Column(db.Integer)

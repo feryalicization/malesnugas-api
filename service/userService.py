@@ -1,4 +1,4 @@
-from entity.model import User
+from entity.model import User, Mapping_notification, Notification
 from entity import db
 from flask import jsonify
 import datetime
@@ -109,9 +109,37 @@ def create_user(param, user_id):
                 a = codecs.decode(token, 'UTF-8')
                 token_user = a.replace('b', '')
                 token_user = a.replace("'", "")
+
+            create_notif = Mapping_notification(
+                is_read=param['is_read'],
+                
+                # Generate
+                notification_id = 1,
+                user_id = create.id,
+                notification_status_id = 1,
+                created_date=datetime.datetime.now(),
+                created_by=create.id,
+            )
+            db.session.add(create_notif)
+            db.session.commit()
+
+            if create_notif:
+                notif = db.session.query(Notification).filter(Notification.deleted_date == None)\
+                    .filter(Notification.id == create_notif.notification_id).first()
+
+                if notif:
+                    notification = notif.message
+
+                user_name = db.session.query(User).filter(User.deleted_date == None)\
+                    .filter(User.id == create_notif.user_id).first()
+
+                if user_name:
+                    user_name = user_name.full_name
+
+                # return True
     
 
-        return jsonify({'code': '1', 'msg': 'Data Success Created!','token':f'{token_user}'})
+        return jsonify({'code': '1', 'notification': f'Selamat {user_name}, anda telah {notification}' ,'msg': 'Data Success Created!','token':f'{token_user}'})
     except sqlalchemy.exc.DataError:
         return jsonify({'msg': 'Data Failed Created!', 'code': '-1'})
     except sqlalchemy.exc.IntegrityError as err:
